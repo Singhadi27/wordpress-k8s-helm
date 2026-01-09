@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: wordpress-pvc
 spec:
+  storageClassName: ""
   accessModes:
     - ReadWriteMany
   resources:

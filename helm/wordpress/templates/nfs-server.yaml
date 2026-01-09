@@ -20,6 +20,8 @@ spec:
           env:
             - name: SHARED_DIRECTORY
               value: /exports
+            - name: EXPORT_OPTS
+              value: rw,sync,no_subtree_check,no_root_squash
           volumeMounts:
             - name: nfs-data
               mountPath: /exports

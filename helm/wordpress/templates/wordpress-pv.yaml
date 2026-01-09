@@ -3,12 +3,13 @@ kind: PersistentVolume
 metadata:
   name: wordpress-pv
 spec:
+  storageClassName: ""
   capacity:
     storage: 5Gi
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    server: nfs-server.default.svc.cluster.local
-    path: /exports
+    server: 10.96.9.38
+    path: /
 
