@@ -65,23 +65,13 @@ The intent is to showcase **DevOps thinking and decision-making**, not just a wo
 The application follows a **layered, production-style architecture**, where each component has a clear responsibility and can be scaled or managed independently.
 
 ### High-Level Architecture
-Client
-  |
-  v
-NodePort Service (Nginx)
-  |
-  v
-Nginx (OpenResty)
-  |
-  v
-WordPress Service (ClusterIP)
-  |
-  v
-WordPress Pods (Deployment)
-  |
+Client --->
+NodePort Service (Nginx) --->
+Nginx (OpenResty) --->
+WordPress Service (ClusterIP) 
+WordPress Pods (Deployment) --->
+  
   +----------------------+
-  |                      |
-  v                      v
 RWX Storage (NFS)   MySQL (StatefulSet, RWO)
 
 
