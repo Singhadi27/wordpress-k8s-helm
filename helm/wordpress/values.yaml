@@ -1,0 +1,18 @@
+mysql:
+  image: mysql:8.0
+  database: wordpress
+  user: wpuser
+  password: wppassword
+  rootPassword: rootpassword
+  storage: 5Gi
+
+wordpress:
+  image: wordpress:latest
+  replicas: 2
+  storage: 5Gi
+
+nginx:
+  image: nginx:latest
+  replicas: 1
+  nodePort: 30080
+

@@ -1,0 +1,7 @@
+apiVersion: v2
+name: wordpress
+description: Production-grade WordPress deployment on Kubernetes using Helm
+type: application
+version: 0.1.0
+appVersion: "6.4"
+

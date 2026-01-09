@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: wordpress
 spec:
-  replicas: 2
+  replicas: {{ .Values.wordpress.replicas }}
   selector:
     matchLabels:
       app: wordpress
@@ -14,18 +14,18 @@ spec:
     spec:
       containers:
         - name: wordpress
-          image: wordpress:latest
+          image: {{ .Values.wordpress.image }}
           ports:
             - containerPort: 80
           env:
             - name: WORDPRESS_DB_HOST
               value: mysql-0.mysql
             - name: WORDPRESS_DB_NAME
-              value: wordpress
+              value: {{ .Values.mysql.database }}
             - name: WORDPRESS_DB_USER
-              value: wpuser
+              value: {{ .Values.mysql.user }}
             - name: WORDPRESS_DB_PASSWORD
-              value: wppassword
+              value: {{ .Values.mysql.password }}
           volumeMounts:
             - name: wp-content
               mountPath: /var/www/html/wp-content

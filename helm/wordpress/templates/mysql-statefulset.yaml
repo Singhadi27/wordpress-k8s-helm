@@ -15,18 +15,18 @@ spec:
     spec:
       containers:
         - name: mysql
-          image: mysql:8.0
+          image: {{ .Values.mysql.image }}
           ports:
             - containerPort: 3306
           env:
             - name: MYSQL_DATABASE
-              value: wordpress
+              value: {{ .Values.mysql.database }}
             - name: MYSQL_USER
-              value: wpuser
+              value: {{ .Values.mysql.user }}
             - name: MYSQL_PASSWORD
-              value: wppassword
+              value: {{ .Values.mysql.password }}
             - name: MYSQL_ROOT_PASSWORD
-              value: rootpassword
+              value: {{ .Values.mysql.rootPassword }}
           volumeMounts:
             - name: mysql-data
               mountPath: /var/lib/mysql
@@ -38,5 +38,5 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 5Gi
+            storage: {{ .Values.mysql.storage }}
 
