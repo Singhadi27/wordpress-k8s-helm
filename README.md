@@ -15,7 +15,7 @@ The setup includes:
 
 The goal of this assignment is not just to run WordPress, but to **design and explain a production-ready architecture**, demonstrate Kubernetes concepts, and show practical DevOps troubleshooting skills.
 
-You can Read more about the Application below the Deploy and Test notes
+You can Read more about the Application below the Deploy and Test notes section
 ---
 ## 📝 Notes to Deploy and Test
 
