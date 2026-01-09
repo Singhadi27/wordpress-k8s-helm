@@ -60,23 +60,6 @@ This repository emphasizes:
 
 The intent is to showcase **DevOps thinking and decision-making**, not just a working demo.
 
-## 🏗️ Architecture Overview
-
-The application follows a **layered, production-style architecture**, where each component has a clear responsibility and can be scaled or managed independently.
-
-### High-Level Architecture
-Client --->
-NodePort Service (Nginx) --->
-Nginx (OpenResty) --->
-WordPress Service (ClusterIP) 
-WordPress Pods (Deployment) --->
-  
-  +----------------------+
-RWX Storage (NFS)   MySQL (StatefulSet, RWO)
-
-
----
-
 ## 🔧 Component Breakdown
 
 ### 1️⃣ Nginx (OpenResty)
