@@ -20,11 +20,9 @@ You can Read more about the Application below the Deploy and Test notes
 ## 📝 Notes to Deploy and Test
 
 This section documents the steps to deploy the application using Helm and validate that all components work as expected in a Kubernetes environment.
-
-==================================================
-🚀 Deployment Notes
-==================================================
-
+ 
+ Deployment Notes
+ 
 Prerequisites:
 - Kubernetes cluster (tested using kind)
 - Helm v3+
