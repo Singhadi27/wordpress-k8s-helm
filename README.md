@@ -15,143 +15,8 @@ The setup includes:
 
 The goal of this assignment is not just to run WordPress, but to **design and explain a production-ready architecture**, demonstrate Kubernetes concepts, and show practical DevOps troubleshooting skills.
 
+You can Read more about the Application below the Deploy and Test notes
 ---
-
-## 🎯 Objectives Covered
-
-- Deploy WordPress on Kubernetes in a production-oriented manner
-- Use Helm charts for templated and repeatable deployments
-- Separate stateless and stateful components correctly
-- Implement persistent storage with appropriate access modes
-- Design for scalability and high availability
-- Add observability using Prometheus and Grafana
-- Clearly document architectural decisions and known limitations
-
----
-
-## 🧠 Design Philosophy
-
-- **Security-first approach**  
-  Sensitive information such as database credentials is injected via environment variables and Kubernetes resources, not baked into container images.
-
-- **Separation of concerns**
-  - **Nginx (OpenResty)** handles incoming traffic and acts as a reverse proxy
-  - **WordPress** handles application logic and remains stateless
-  - **MySQL** stores application data and runs as a stateful workload
-
-- **Cloud-native principles**
-  - Immutable container images
-  - Declarative Kubernetes manifests
-  - Externalized configuration and storage
-
-- **Production realism**
-  The focus is on correct architecture, storage design, and monitoring rather than shortcuts to simply make the application run locally.
-
----
-
-## ✅ What This Project Demonstrates
-
-This repository emphasizes:
-- Correct Kubernetes workload selection (Deployment vs StatefulSet)
-- Proper use of Persistent Volumes and Persistent Volume Claims
-- RWX storage design for horizontally scaled applications
-- Helm-based application lifecycle management
-- Real-world troubleshooting of Kubernetes storage and local cluster limitations
-
-The intent is to showcase **DevOps thinking and decision-making**, not just a working demo.
-
-## 🔧 Component Breakdown
-
-### 1️⃣ Nginx (OpenResty)
-
-- Acts as a **reverse proxy** in front of the WordPress application
-- Prevents direct exposure of application pods
-- Enables future support for:
-  - Request logging
-  - Rate limiting
-  - Lua-based request metrics
-- Deployed as a **Kubernetes Deployment**
-- Exposed externally using a **NodePort Service**
-
-**Why Nginx runs separately:**
-- Reverse proxies should be independent from application containers
-- Allows scaling, configuration changes, and observability without touching the app
-- Follows real-world production patterns
-
----
-
-### 2️⃣ WordPress
-
-- Deployed as a **stateless application** using a Kubernetes Deployment
-- Scaled horizontally using multiple replicas
-- Stores:
-  - Application code inside the container image
-  - User-generated content (uploads, plugins, themes) on shared storage
-- Connects to MySQL using internal Kubernetes DNS
-
-**Why WordPress is stateless:**
-- Pods can be created and destroyed at any time
-- All state is externalized to:
-  - MySQL (structured data)
-  - Shared filesystem (unstructured data)
-
----
-
-### 3️⃣ MySQL
-
-- Deployed using a **StatefulSet**
-- Uses a **Headless Service** for stable network identity
-- Backed by a **ReadWriteOnce (RWO) Persistent Volume**
-- Ensures:
-  - Stable pod identity (`mysql-0`)
-  - Stable storage attachment
-  - Data consistency
-
-**Why StatefulSet is required:**
-- Databases require stable identity and exclusive write access
-- Prevents multiple pods from writing to the same data volume
-
----
-
-### 4️⃣ Persistent Storage Design
-
-| Component   | Storage Type | Access Mode |
-|------------|-------------|-------------|
-| WordPress  | Shared NFS   | ReadWriteMany (RWX) |
-| MySQL      | Block Volume | ReadWriteOnce (RWO) |
-
-**Why RWX for WordPress:**
-- Multiple WordPress replicas need access to the same:
-  - Media uploads
-  - Plugins
-  - Themes
-- Ensures consistency across all application pods
-
-**Why RWO for MySQL:**
-- Databases must allow **only one writer**
-- Prevents data corruption and race conditions
-
----
-
-### 5️⃣ ReadWriteMany (RWX) via NFS
-
-- RWX storage is implemented using an **NFS-backed PersistentVolume**
-- Enables horizontal scaling of WordPress pods
-- In production, this would typically be replaced by:
-  - Managed NFS
-  - AWS EFS
-  - Cloud-native file storage
-
----
-
-## 🔁 Application Lifecycle
-
-- Entire stack can be deployed using a **single Helm command**
-- Application components can be updated independently
-- Pods can be restarted without data loss due to externalized storage
-
-This architecture closely mirrors how WordPress is deployed in **real production Kubernetes environments**.
-
 ## 📝 Notes to Deploy and Test
 
 This section documents the steps to deploy the application using Helm and validate that all components work as expected in a Kubernetes environment.
@@ -476,4 +341,141 @@ Grafana dashboards validate that the application is:
 - Scalable
 - Observable
 - Production-ready
+
+
+## 🎯 Objectives Covered
+
+- Deploy WordPress on Kubernetes in a production-oriented manner
+- Use Helm charts for templated and repeatable deployments
+- Separate stateless and stateful components correctly
+- Implement persistent storage with appropriate access modes
+- Design for scalability and high availability
+- Add observability using Prometheus and Grafana
+- Clearly document architectural decisions and known limitations
+
+---
+
+## 🧠 Design Philosophy
+
+- **Security-first approach**  
+  Sensitive information such as database credentials is injected via environment variables and Kubernetes resources, not baked into container images.
+
+- **Separation of concerns**
+  - **Nginx (OpenResty)** handles incoming traffic and acts as a reverse proxy
+  - **WordPress** handles application logic and remains stateless
+  - **MySQL** stores application data and runs as a stateful workload
+
+- **Cloud-native principles**
+  - Immutable container images
+  - Declarative Kubernetes manifests
+  - Externalized configuration and storage
+
+- **Production realism**
+  The focus is on correct architecture, storage design, and monitoring rather than shortcuts to simply make the application run locally.
+
+---
+
+## ✅ What This Project Demonstrates
+
+This repository emphasizes:
+- Correct Kubernetes workload selection (Deployment vs StatefulSet)
+- Proper use of Persistent Volumes and Persistent Volume Claims
+- RWX storage design for horizontally scaled applications
+- Helm-based application lifecycle management
+- Real-world troubleshooting of Kubernetes storage and local cluster limitations
+
+The intent is to showcase **DevOps thinking and decision-making**, not just a working demo.
+
+## 🔧 Component Breakdown
+
+### 1️⃣ Nginx (OpenResty)
+
+- Acts as a **reverse proxy** in front of the WordPress application
+- Prevents direct exposure of application pods
+- Enables future support for:
+  - Request logging
+  - Rate limiting
+  - Lua-based request metrics
+- Deployed as a **Kubernetes Deployment**
+- Exposed externally using a **NodePort Service**
+
+**Why Nginx runs separately:**
+- Reverse proxies should be independent from application containers
+- Allows scaling, configuration changes, and observability without touching the app
+- Follows real-world production patterns
+
+---
+
+### 2️⃣ WordPress
+
+- Deployed as a **stateless application** using a Kubernetes Deployment
+- Scaled horizontally using multiple replicas
+- Stores:
+  - Application code inside the container image
+  - User-generated content (uploads, plugins, themes) on shared storage
+- Connects to MySQL using internal Kubernetes DNS
+
+**Why WordPress is stateless:**
+- Pods can be created and destroyed at any time
+- All state is externalized to:
+  - MySQL (structured data)
+  - Shared filesystem (unstructured data)
+
+---
+
+### 3️⃣ MySQL
+
+- Deployed using a **StatefulSet**
+- Uses a **Headless Service** for stable network identity
+- Backed by a **ReadWriteOnce (RWO) Persistent Volume**
+- Ensures:
+  - Stable pod identity (`mysql-0`)
+  - Stable storage attachment
+  - Data consistency
+
+**Why StatefulSet is required:**
+- Databases require stable identity and exclusive write access
+- Prevents multiple pods from writing to the same data volume
+
+---
+
+### 4️⃣ Persistent Storage Design
+
+| Component   | Storage Type | Access Mode |
+|------------|-------------|-------------|
+| WordPress  | Shared NFS   | ReadWriteMany (RWX) |
+| MySQL      | Block Volume | ReadWriteOnce (RWO) |
+
+**Why RWX for WordPress:**
+- Multiple WordPress replicas need access to the same:
+  - Media uploads
+  - Plugins
+  - Themes
+- Ensures consistency across all application pods
+
+**Why RWO for MySQL:**
+- Databases must allow **only one writer**
+- Prevents data corruption and race conditions
+
+---
+
+### 5️⃣ ReadWriteMany (RWX) via NFS
+
+- RWX storage is implemented using an **NFS-backed PersistentVolume**
+- Enables horizontal scaling of WordPress pods
+- In production, this would typically be replaced by:
+  - Managed NFS
+  - AWS EFS
+  - Cloud-native file storage
+
+---
+
+## 🔁 Application Lifecycle
+
+- Entire stack can be deployed using a **single Helm command**
+- Application components can be updated independently
+- Pods can be restarted without data loss due to externalized storage
+
+This architecture closely mirrors how WordPress is deployed in **real production Kubernetes environments**.
+
 
