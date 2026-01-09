@@ -28,13 +28,13 @@ Prerequisites:
 - Helm v3+
 - kubectl configured for the cluster
 - Docker running (required for kind)
-==================================================
+
 STEP 0: Install Prerequisites
-==================================================
+
 
 This step installs all required tools before deploying the application.
 
---------------------------------------------------
+
 Operating System
 --------------------------------------------------
 - Linux / WSL2 / macOS
@@ -163,9 +163,8 @@ Expected state:
 - PVCs → Bound
 - WordPress pods → Running (when RWX storage is available)
 
-==================================================
-🧪 Testing Notes
-==================================================
+ Testing Notes
+
 
 --------------------------------------------------
 Test 1: Application Reachability
@@ -234,9 +233,9 @@ If monitoring is enabled using Prometheus and Grafana:
   - Node metrics
   - Kubernetes object metrics
 
-==================================================
-🔄 Upgrade and Retest
-==================================================
+
+ Upgrade and Retest
+
 
 Apply configuration or image changes:
 
@@ -246,9 +245,9 @@ Repeat the above tests to ensure:
 - No data loss
 - Stable application behavior
 
-==================================================
-⚠️ Local Environment Notes
-==================================================
+
+ Local Environment Notes
+
 
 - RWX storage is demonstrated using an in-cluster NFS server
 - Local Kubernetes environments (e.g., kind on WSL) may encounter NFS kernel limitations
@@ -256,9 +255,8 @@ Repeat the above tests to ensure:
 
 These limitations do not affect the architectural correctness of the solution.
 
-==================================================
 🧹 Cleanup After Testing
-==================================================
+
 
 Remove the application:
 
@@ -268,9 +266,9 @@ Delete the Kubernetes cluster:
 
 kind delete cluster --name wordpress-cluster
 
-==================================================
+
 ✅ Summary
-==================================================
+
 
 Following these steps validates:
 - Correct Helm-based deployment
